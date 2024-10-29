@@ -13,7 +13,9 @@ defmodule Aox.Day1 do
   end
 
   defp read_input do
-    case File.read("/home/mikel/Escritorio/programacion/elixir/aox/inputs/day1.txt") do
+    input = File.cwd!() <> "/inputs/day1.txt"
+
+    case File.read(input) do
       {:ok, contents} ->
         contents
         |> String.split("\n", trim: true)
