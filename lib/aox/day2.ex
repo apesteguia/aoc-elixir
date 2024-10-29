@@ -13,7 +13,18 @@ defmodule Aox.Day2 do
         end
       end)
 
+    IO.puts("Part1: ")
     IO.inspect(twos * threes)
+
+    input
+    |> Enum.map(fn x -> input |> Enum.map(fn c -> compare_two(x, c) end) end)
+    |> Enum.filter(fn x ->
+      case x do
+        {true, _} -> true
+        _ -> false
+      end
+    end)
+    |> IO.inspect()
   end
 
   defp read_input do
@@ -42,6 +53,30 @@ defmodule Aox.Day2 do
       {true, false} -> {:two}
       {false, true} -> {:three}
       _ -> {}
+    end
+  end
+
+  defp compare_two(a, b) do
+    str1 = a |> String.graphemes()
+    str2 = b |> String.graphemes()
+
+    case compare_aux(str1, str2, 0, "") do
+      {true, str} -> {true, str}
+      _ -> false
+    end
+  end
+
+  defp compare_aux([], [], count, str) when count == 1, do: {true, str}
+  defp compare_aux([], [], _, _), do: {false, ""}
+
+  defp compare_aux([h1 | t1], [h2 | t2], count, str) do
+    if count > 1 do
+      {false, ""}
+    else
+      case h1 == h2 do
+        true -> compare_aux(t1, t2, count, str <> h1)
+        false -> compare_aux(t1, t2, count + 1, str)
+      end
     end
   end
 end
